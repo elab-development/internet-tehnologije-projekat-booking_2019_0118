@@ -11,7 +11,7 @@ import removeImgFromUser from './migrations/removeImgFromUser.js';
 import addFkToRooms from './migrations/addFkToRooms.js';
 import addIsActiveToUsers from "./migrations/addIsActiveToUsers.js";
 import addRestrictionToRating from "./migrations/addRestrictionToRating.js";
-//import cors from "cors";
+import cors from "cors";
 
 const app = express();
 dotenv.config();
@@ -35,7 +35,7 @@ mongoose.connection.on("disconnected", () => {
 });
 
 
-//app.use(cors())
+app.use(cors())
 app.use(cookieParser())
 app.use(express.json());
 

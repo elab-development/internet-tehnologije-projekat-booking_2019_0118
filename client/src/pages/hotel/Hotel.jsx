@@ -10,9 +10,10 @@ import {
   faCircleXmark,
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useContext, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
+import { SearchContext } from "../../context/SearchContext";
 
 const Hotel = () => {
   const location = useLocation();
@@ -20,11 +21,19 @@ const Hotel = () => {
 
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
-
+  const navigate = useNavigate();
 
   const { data, loading, error } = useFetch(`http://localhost:8800/hotels/find/${id}`);
 
- 
+  const { date, options } = useContext(SearchContext);
+  const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
+  function dayDifference(date1, date2) {
+    const timeDiff = Math.abs(date2.getTime() - date1.getTime());
+    const diffDays = Math.ceil(timeDiff / MILLISECONDS_PER_DAY);
+    return diffDays;
+  }
+
+  const days = dayDifference(date[0].endDate, date[0].startDate);
 
   const handleOpen = (i) => {
     setSlideNumber(i);
@@ -105,13 +114,13 @@ const Hotel = () => {
                 <p className="hotelDesc">{data.desc}</p>
               </div>
               <div className="hotelDetailsPrice">
-                <h1>Perfect for a 9-night stay!</h1>
+                <h1>Perfect for a {days}-night stay!</h1>
                 <span>
-                  Located in the real heart of Belgrade, this property has an
+                  Located in the real heart of the city, this property has an
                   excellent location score of 9.9!
                 </span>
                 <h2>
-                  <b>${9 * data.cheapestPrice * 2}</b> 9 nights)
+                  <b>${days * data.cheapestPrice * options.room}</b> ({days}{" "} nights)
                 </h2>
                 <button>Reserve or Book Now!</button>
               </div>
@@ -121,7 +130,7 @@ const Hotel = () => {
           <Footer />
         </div>
       )}
-      
+
     </div>
   );
 };

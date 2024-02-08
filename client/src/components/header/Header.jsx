@@ -43,6 +43,11 @@ const Header = ({ type }) => {
     });
   };
 
+
+  const handleLoginClick = () => {
+    navigate("/login");
+  };
+
   const { dispatch } = useContext(SearchContext);
 
   const handleSearch = () => {
@@ -71,7 +76,7 @@ const Header = ({ type }) => {
             <p className="headerDesc">
               Search low prices on hotels and much more!
             </p>
-            {!user && <button className="headerBtn">Sign in / Register</button>}
+            {!user && <button onClick={handleLoginClick} className="headerBtn">Sign in / Register</button>}
             <div className="headerSearch">
               <div className="headerSearchItem">
                 <FontAwesomeIcon icon={faBed} className="headerIcon" />

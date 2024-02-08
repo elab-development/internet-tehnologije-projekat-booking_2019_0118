@@ -18,6 +18,10 @@ const Login = () => {
     setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
 
+  const handleRegisterClick = async (e) => {
+    navigate("/register");
+  };
+
   const handleClick = async (e) => {
     e.preventDefault();
     dispatch({ type: "LOGIN_START" });
@@ -34,6 +38,7 @@ const Login = () => {
   return (
     <div className="login">
       <div className="lContainer">
+        
         <input
           type="text"
           placeholder="username"
@@ -52,6 +57,8 @@ const Login = () => {
           Login
         </button>
         {error && <span>{error.message}</span>}
+        <label>If you don't have an account, register below.</label>
+        <button onClick={handleRegisterClick} className="lButton">Register</button>
       </div>
     </div>
   );

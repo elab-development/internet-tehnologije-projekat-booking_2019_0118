@@ -12,6 +12,10 @@ const Navbar = () => {
   };
 
 
+  const handleRegisterClick = async (e) => {
+    navigate("/register");
+  };
+
   const handleLogOutClick = () => {
     localStorage.setItem("user", null)
     navigate("/login");
@@ -29,7 +33,7 @@ const Navbar = () => {
             <button onClick={handleLogOutClick} className="navButton">Log out</button>
           </div>) : (
             <div className="navItems">
-              <button className="navButton">Register</button>
+              <button onClick={handleRegisterClick} className="navButton">Register</button>
               <button onClick={handleLoginClick} className="navButton">Login</button>
             </div>
           )

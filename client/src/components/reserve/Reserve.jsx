@@ -16,21 +16,27 @@ const Reserve = ({ setOpen, hotelId }) => {
   const getDatesInRange = (startDate, endDate) => {
     const start = new Date(startDate);
     const end = new Date(endDate);
+    console.log(start)
+    console.log(start.getTime())
 
     const newDate = new Date(start.getTime());
+    console.log(newDate)
+    console.log("cao")
 
     const dates = [];
 
     while (newDate <= end) {
-      dates.push(new Date(newDate).getTime());
+      dates.push(new Date(newDate).getTime()+1000*60*60*24);
       newDate.setDate(newDate.getDate() + 1);
+      console.log(newDate)
     }
 
     return dates;
   };
 
   const alldates = getDatesInRange(date[0].startDate, date[0].endDate);
-
+  console.log("novi")
+  console.log(alldates)
   const isAvailable = (roomNumber) => {
     const isFound = roomNumber.unavailableDates.some((date) =>
       alldates.includes(new Date(date).getTime())

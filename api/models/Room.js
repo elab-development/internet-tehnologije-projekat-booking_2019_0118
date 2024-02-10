@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Hotel from "./Hotel.js";
+import User from "./User.js";
 const RoomSchema = new mongoose.Schema(
   {
     title: {
@@ -23,6 +24,11 @@ const RoomSchema = new mongoose.Schema(
       ref: Hotel
     },
     roomNumbers: [{ number: Number, unavailableDates: {type: [Date]}}],
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: User
+    }
+    
   },
   { timestamps: true }
 );

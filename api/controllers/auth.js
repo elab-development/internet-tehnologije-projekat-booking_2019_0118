@@ -29,6 +29,7 @@ export const register = async (req, res, next) => {
         req.body.password,
         user.password
       );
+
       if (!isPasswordCorrect)
         return next(createError(400, "Wrong password or username!"));
   
@@ -36,6 +37,7 @@ export const register = async (req, res, next) => {
         { id: user._id, isAdmin: user.isAdmin },
         process.env.JWT
       );
+      
   
       const { password, isAdmin, ...otherDetails } = user._doc;
       res
@@ -43,7 +45,7 @@ export const register = async (req, res, next) => {
           httpOnly: true,
         })
         .status(200)
-        .json({ details: { ...otherDetails }, isAdmin });
+        .json({ details: { ...otherDetails }, isAdmin, token });
     } catch (err) {
       next(err);
     }

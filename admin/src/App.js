@@ -3,15 +3,27 @@ import Login from "./pages/login/Login";
 import List from "./pages/list/List";
 import Single from "./pages/single/Single";
 import NewUser from "./pages/newUser/NewUser";
-import { BrowserRouter, Routes, Route} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { userInputs } from "./formSource";
+import { useContext } from "react";
+import { AuthContext } from "./context/AuthContext";
+import { hotelColumns, roomColumns, userColumns } from "./datatablesource";
 import NewHotel from "./pages/newHotel/NewHotel";
 import NewRoom from "./pages/newRoom/NewRoom";
 
 function App() {
 
+  const ProtectedRoute = ({ children }) => {
+    const { user } = useContext(AuthContext);
+
+    if (!user) {
+      return <Navigate to="/login" />;
+    }
+
+    return children;
+  };
 
   return (
-    <div>
       <BrowserRouter>
         <Routes>
           <Route path="/">
@@ -19,26 +31,34 @@ function App() {
             <Route
               index
               element={
+                <ProtectedRoute>
                   <Home />
+                </ProtectedRoute>
               }
             />
             <Route path="users">
               <Route
                 index
                 element={
-                    <List/>
+                  <ProtectedRoute>
+                    <List columns={userColumns} />
+                  </ProtectedRoute>
                 }
               />
               <Route
                 path=":userId"
                 element={
+                  <ProtectedRoute>
                     <Single />
+                  </ProtectedRoute>
                 }
               />
               <Route
                 path="new"
                 element={
-                    <NewUser title="Add New User" />
+                  <ProtectedRoute>
+                    <NewUser inputs={userInputs} title="Add New User" />
+                  </ProtectedRoute>
                 }
               />
             </Route>
@@ -46,19 +66,25 @@ function App() {
               <Route
                 index
                 element={
-                    <List  />
+                  <ProtectedRoute>
+                    <List columns={hotelColumns} />
+                  </ProtectedRoute>
                 }
               />
               <Route
-                path=":productId"
+                path=":hotelId"
                 element={
+                  <ProtectedRoute>
                     <Single />
+                  </ProtectedRoute>
                 }
               />
               <Route
                 path="new"
                 element={
+                  <ProtectedRoute>
                     <NewHotel  />
+                  </ProtectedRoute>
                 }
               />
             </Route>
@@ -66,26 +92,31 @@ function App() {
               <Route
                 index
                 element={
-                    <List  />
+                  <ProtectedRoute>
+                    <List columns={roomColumns} />
+                  </ProtectedRoute>
                 }
               />
               <Route
-                path=":productId"
+                path=":roomId"
                 element={
+                  <ProtectedRoute>
                     <Single />
+                  </ProtectedRoute>
                 }
               />
               <Route
                 path="new"
                 element={
+                  <ProtectedRoute>
                     <NewRoom  />
+                  </ProtectedRoute>
                 }
               />
             </Route>
           </Route>
         </Routes>
       </BrowserRouter>
-    </div>
   );
 }
 

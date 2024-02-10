@@ -14,21 +14,26 @@ import addRestrictionToRating from "./migrations/addRestrictionToRating.js";
 import cors from "cors";
 
 const app = express();
+
+
 dotenv.config();
 
 const connect = async () => {
     try {
         await mongoose.connect(process.env.MONGO);
         console.log("Connected to mongoDB.");
-        //addUniqueKeyToHotel();
-        //removeImgFromUser();
-        //addFkToRooms()
-        //addIsActiveToUsers();
-        //addRestrictionToRating();
+
     } catch (error) {
         throw error;
     }
 };
+
+
+//addUniqueKeyToHotel();
+//removeImgFromUser();
+//addFkToRooms()
+//addIsActiveToUsers();
+//addRestrictionToRating();
 
 mongoose.connection.on("disconnected", () => {
     console.log("mongoDB disconnected!");

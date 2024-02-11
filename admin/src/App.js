@@ -1,7 +1,6 @@
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import List from "./pages/list/List";
-import Single from "./pages/single/Single";
 import NewUser from "./pages/newUser/NewUser";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { userInputs } from "./formSource";
@@ -45,14 +44,7 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              <Route
-                path=":userId"
-                element={
-                  <ProtectedRoute>
-                    <Single />
-                  </ProtectedRoute>
-                }
-              />
+              
               <Route
                 path="new"
                 element={
@@ -71,14 +63,7 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              <Route
-                path=":hotelId"
-                element={
-                  <ProtectedRoute>
-                    <Single />
-                  </ProtectedRoute>
-                }
-              />
+              
               <Route
                 path="new"
                 element={
@@ -97,14 +82,7 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              <Route
-                path=":roomId"
-                element={
-                  <ProtectedRoute>
-                    <Single />
-                  </ProtectedRoute>
-                }
-              />
+              
               <Route
                 path="new"
                 element={

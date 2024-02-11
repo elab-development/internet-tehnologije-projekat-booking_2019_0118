@@ -22,6 +22,11 @@ const connect = async () => {
     try {
         await mongoose.connect(process.env.MONGO);
         console.log("Connected to mongoDB.");
+        //addUniqueKeyToHotel();
+        //removeImgFromUser();
+        addFkToRooms()
+        //addIsActiveToUsers();
+        //addRestrictionToRating();
 
     } catch (error) {
         throw error;
@@ -29,11 +34,7 @@ const connect = async () => {
 };
 
 
-//addUniqueKeyToHotel();
-//removeImgFromUser();
-//addFkToRooms()
-//addIsActiveToUsers();
-//addRestrictionToRating();
+
 
 mongoose.connection.on("disconnected", () => {
     console.log("mongoDB disconnected!");

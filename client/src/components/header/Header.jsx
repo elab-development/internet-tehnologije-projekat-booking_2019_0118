@@ -4,9 +4,10 @@ import {
   faPerson,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { AsyncPaginate } from "react-select-async-paginate";
 import "./header.css";
 import { DateRange } from "react-date-range";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { format } from "date-fns";
@@ -15,6 +16,14 @@ import { SearchContext } from "../../context/SearchContext";
 import { AuthContext } from "../../context/AuthContext";
 
 const Header = ({ type }) => {
+  const GeoUrl = 'https://countriesnow.space/api/v0.1/countries/cities';
+  const GeoOptions = {
+    method: 'POST',
+    headers: {
+      "country": "Serbia"
+    }
+  };
+
   const [destination, setDestination] = useState("");
   const [openDate, setOpenDate] = useState(false);
   const [date, setDate] = useState([
@@ -55,6 +64,56 @@ const Header = ({ type }) => {
     navigate("/hotels", { state: { destination, date, options } });
   };
 
+  const fetchCities = async () => {
+    const response = await fetch('https://countriesnow.space/api/v0.1/countries/cities', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ country: "Serbia" }),
+    });
+
+    if (!response.ok) throw new Error('Network response was not ok');
+
+    const data = await response.json();
+    return data.data.map((city) => ({ label: city, value: city }));
+  };
+
+  const [cOptions, setcOptions] = useState([]);
+
+  useEffect(() => {
+    const loadCities = async () => {
+      const cityOptions = await fetchCities();
+      setcOptions(cityOptions);
+    };
+
+    loadCities();
+  }, []);
+
+  const filterCities = (inputValue) => {
+    return cOptions.filter(i =>
+      i.label.toLowerCase().includes(inputValue.toLowerCase())
+    );
+  };
+
+  const loadOptions = (inputValue) => {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve({
+          options: filterCities(inputValue)
+        });
+      }, 100);
+    });
+  };
+  
+  const [search, setSearch] = useState(null);
+
+  const handleOnChange = (selectedOption) => {
+    setSearch(selectedOption);
+    setDestination(selectedOption.value)
+  };
+
+
   return (
     <div className="header">
       <div
@@ -63,7 +122,7 @@ const Header = ({ type }) => {
         }
       >
         <div className="headerList">
-        <div className="headerListItem active">
+          <div className="headerListItem active">
             <FontAwesomeIcon icon={faBed} />
             <span>Stays</span>
           </div>
@@ -80,12 +139,15 @@ const Header = ({ type }) => {
             <div className="headerSearch">
               <div className="headerSearchItem">
                 <FontAwesomeIcon icon={faBed} className="headerIcon" />
-                <input
-                  type="text"
+                <AsyncPaginate
                   placeholder="Where are you going?"
                   className="headerSearchInput"
-                  onChange={(e) => setDestination(e.target.value)}
+                  debounceTimeout={600}
+                  value={search}
+                  loadOptions={loadOptions}
+                  onChange={handleOnChange}
                 />
+
               </div>
               <div className="headerSearchItem">
                 <FontAwesomeIcon icon={faCalendarDays} className="headerIcon" />
